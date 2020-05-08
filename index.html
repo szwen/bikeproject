@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="http://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <link rel="icon" type="image/svg+xml" href="https://upload.wikimedia.org/wikipedia/commons/0/00/Bicycle-icon.svg">
+
+</head>
+<body ng-app='app'>
+  <div ng-controller='ActionsCtrl' class='container'>
+    <h1>What do you want to do?</h1>
+   <!-- <div class='btn-group' role='group'> -->
+      <button type='button' class='btn btn-primary btn-lg btn-block' ng-click='startService()' type='start'>Start</button>
+      <button type='button' class='btn btn-secondary btn-lg btn-block' ng-click='stopService()' type='stop'>Stop</button>
+      <button type='button' class='btn btn-warning btn-lg btn-block' ng-click='viewLogs()' type='logs'>View Logs</button>  
+        <!--  </div> -->
+    <br>
+    {{actions}}
+    <br>
+    {{log}}
+</div>
+
+         <br> 
+
+
+
+  <div ng-controller='PostsCtrl' class='container'>
+    <h1>Recent Posts</h1>
+    <ul class='list-group'>
+      <li ng-repeat='post in posts' class='list-group-item'>
+        <strong>@{{post.username}}</strong>
+        <span>{{post.body}}</span>
+      </li>
+    </ul>
+  </div>
+  <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js'></script>
+  <script>
+    var app = angular.module('app',[])
+    app.controller('PostsCtrl', function($scope){
+      $scope.posts = [
+        {
+          username:'dickey',
+          body: 'Node rules!'
+        }
+      ]
+    })
+ <!-- </script>
+  <script>
+    var app = angular.module('app',[])
+-->
+    function sleep(ms){
+      return new Promise(resolve => setTimeout(resolve,ms));
+    }
+    async function demo($scope, $http){
+      while(true){
+        await sleep(3000)
+        $http.get('/rpm').success(function(response){
+         console.log('response '+response)
+	 $scope.log=response
+        })
+      }
+    }
+    app.controller('ActionsCtrl', function($scope, $http){
+      $scope.actions='Waiting for info...'
+      $scope.startService = function(){
+        $scope.actions='Starting service'
+        $http.get('/start').success(function(response){
+	  $scope.log=response
+          demo($scope, $http)
+   //       while(true){
+   //         await sleep(3000)
+   //         $http.get('/rpm').success(function(response){
+   //	      $scope.log+='\n'+response
+   //         })
+   //       }
+            
+	})
+      }
+      $scope.stopService = function(){
+        $scope.actions='Stopping service'
+        $http.get('/stop').success(function(response){
+	  $scope.log=response
+	})
+      }
+      $scope.viewLogs = function(){
+        $scope.actions='Requesting logs'
+      }
+    })
+  </script>
+</body>
+</html>

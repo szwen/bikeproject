@@ -11,7 +11,7 @@ Reads speed and break info from BH stay-at-home bike
 
 ## tools
 
-* `print_sound_index`: you need to run this script to know the USB index in which the sound input is plugged. This sound index needs to be updated in the record_sound script.
+* `print_sound_index`: you need to run this script to know the USB index in which the sound input is plugged. This sound index needs to be updated in the `record_sound` and `realtime_frequency` scripts.
 * `record_sound`: modify the name of the file in the script and update the dev_index according to the previous script. It records a 10' wav file.
 * `plot_wav_file`: as the name says.
 * `analyse_wav_file_testdownsample` & `analyse_wav_file_testrpm` test the algorithms for downsampling and computing the rpm according to the peaks found. Some parameters would need to be adjusted to the signal (plot_wav_file helps) such as:

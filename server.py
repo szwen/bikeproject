@@ -4,8 +4,10 @@ import sys
 import realtime_frequency as rpm
 import threading
 
+stop_thread = False
+global thread1 
+#= threading.Thread(target = rpm.main, args =(lambda : stop_thread, ))
 
-thread1 = threading.Thread(target = rpm.main)
 
 def return_index():
   file = open('index.html')
@@ -24,11 +26,19 @@ def getBye(handler):
   handler.wfile.write(message)
 
 def startService(handler):
+  global thread1
+  global stop_thread
+  stop_thread = False
   handler.send_header('Content-type', 'text/plain')
   handler.end_headers()
   message = bytes('service started!', 'utf-8')
   handler.wfile.write(message)
-  thread1.start()
+  try:
+    thread1 = threading.Thread(target = rpm.main, args =(lambda : stop_thread, ))
+    thread1.start()
+  except RuntimeError:
+    print('thread was already started')
+    pass
 
 def getRpm(handler):
   handler.send_header('Content-type', 'text/plain')
@@ -36,6 +46,10 @@ def getRpm(handler):
   message = bytes(str(100), 'utf-8')
 
 def stopService(handler):
+  global stop_thread
+  global thread_1
+  stop_thread = True
+  thread1.join() 
   handler.send_header('Content-type', 'text/plain')
   handler.end_headers()
   message = bytes('service stopped!', 'utf-8')

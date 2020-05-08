@@ -87,20 +87,23 @@ def processSignal(trololo):
   
 
 
-def main():
+def main(stop = None):
   audio = pyaudio.PyAudio() # create pyaudio instantiation
   stream = audio.open(format = form_1, rate = samp_rate, channels = chans, input_device_index = dev_index, input = True, frames_per_buffer = chunk, stream_callback = callback)
   print("recording")
   try: 
     while True:
-      pass
+      if stop():
+        break
   except KeyboardInterrupt:
     pass
   print("finished recording")
   stream.stop_stream()
   stream.close()
   audio.terminate()
+  return
 
 if __name__ == "__main__":
   main()
+  
 

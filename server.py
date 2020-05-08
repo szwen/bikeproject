@@ -4,11 +4,11 @@ import sys
 import realtime_frequency as rpm
 import threading
 
-rpmtogo
-thread1 = threading.Thread(target = rpm.main, args = (rpmtogo))
+
+thread1 = threading.Thread(target = rpm.main)
 
 def return_index():
-  file = open('index2.html')
+  file = open('index.html')
   return file.read()
 
 def getHello(handler):
@@ -33,7 +33,7 @@ def startService(handler):
 def getRpm(handler):
   handler.send_header('Content-type', 'text/plain')
   handler.end_headers()
-  message = bytes(str(rpm.serveRpm()), 'utf-8')
+  message = bytes(str(100), 'utf-8')
 
 def stopService(handler):
   handler.send_header('Content-type', 'text/plain')
@@ -46,7 +46,7 @@ class MyRequestHandler(http.server.BaseHTTPRequestHandler):
   def do_GET(self):
     handler = self
     print('Receiving request for path ' + str(self.path))
-    if self.path == '/hello' or self.path=='':
+    if self.path == '/hello' or self.path=='/':
       self.send_response(200)
       getHello(self)
       print('Sending resource to '+ str(self.client_address))

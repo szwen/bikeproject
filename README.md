@@ -1,6 +1,14 @@
 # bikeproject
 Reads speed and break info from BH stay-at-home bike
 
+## requirements
+
+`> sudo apt-get install libportaudio0 libportaudio2 libportaudiocpp0 portaudio19-dev`
+
+`> sudo pip3 install pyaudio`
+
+`> pip3 install mathplotlib`
+
 ## tools
 
 * `print_sound_index`: you need to run this script to know the USB index in which the sound input is plugged. This sound index needs to be updated in the record_sound script.

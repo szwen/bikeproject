@@ -11,3 +11,8 @@ Reads speed and break info from BH stay-at-home bike
   * distance (in samples): minimum distance between peaks to detect - required to speed up the algorithm - it is computed as samples_per_second*1/max_rpm*60seconds
   * downsample factor: from a 44.1kHz signal the samples per second are divided by this factor - make a few tests with the files above to make sure you keep the samples to analyse to a minimum without missing any peak in the signal.
   * start (in seconds): in case there is a delay from the start of the recording and the start of the signal to analyse.
+  
+ ## RPM computation
+ 
+ The `realtime_frequency` script takes an audio input (assumed to be composed of regular peaks) and computes their frequency in rpm in a 3s window.
+ Settings such as `dev_index`, `distance`, `threshold` or `downsample factor` detailed in Tools apply here and they have to be adapted to the signal to measure.

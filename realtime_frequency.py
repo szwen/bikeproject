@@ -10,12 +10,12 @@ chans = 1 # channels
 samp_rate = 44100 # 44.1kHz sampling rate
 chunk = 4096 # samples for buffer
 record_secs = 3
-downsample_factor = 12 # 8
+downsample_factor = 24 # 8
 real_rate = samp_rate/downsample_factor
 dev_index = 2 #device index from print sound index script
 # values to adjust for the signal to be processed quickly
-threshold = 1000 # this is for audio tests with my phone
-#threshold = 10000 # bike
+#threshold = 1000 # this is for audio tests with my phone
+threshold = 10000 # bike
 min_distance = int(real_rate * 60 / 120) # we'll limit max within 120 rpm
 start = 0
 
@@ -106,8 +106,9 @@ def main(stop = None, ext_queue = None):
   print("recording")
   try: 
     while True:
-      if stop():
-        break
+      if stop:
+        if stop():
+          break
   except KeyboardInterrupt:
     pass
   print("finished recording")

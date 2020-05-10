@@ -3,6 +3,7 @@ import numpy as np
 import wave
 import sys
 import pyaudio
+import queue
 
 form_1 = pyaudio.paInt16 #16-bit resolution
 chans = 1 # channels
@@ -21,6 +22,7 @@ start = 0
 length_analysis = int(record_secs * samp_rate)
 signal = b''
 
+global int_queue
 
 # find local max which are separated by a minimum distance
 # optionally local max values need to be larger than a threshold
@@ -66,7 +68,10 @@ def compute_rpm(max_values):
     intervals += 1   
   if intervals == 0:
     return 0
-  return int(rpm_acc/intervals)  
+  rpm = int(rpm_acc/intervals)
+  global int_queue
+  int_queue.put(rpm)
+  return rpm  
 
 #def serveRpm():
   #print('Returning rpm ' + str(rpm))
@@ -87,9 +92,16 @@ def processSignal(trololo):
   
 
 
-def main(stop = None):
+def main(stop = None, ext_queue = None):
   audio = pyaudio.PyAudio() # create pyaudio instantiation
   stream = audio.open(format = form_1, rate = samp_rate, channels = chans, input_device_index = dev_index, input = True, frames_per_buffer = chunk, stream_callback = callback)
+  global int_queue
+  if ext_queue:
+    int_queue = ext_queue
+    print("Using external queue")
+  else:
+    int_queue = queue.Queue()
+    print("Using internal queue")
   print("recording")
   try: 
     while True:

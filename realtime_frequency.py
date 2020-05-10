@@ -66,9 +66,10 @@ def compute_rpm(max_values):
     rpm_acc += int(60 * real_rate / distance)
     #print('rpm_acc ' + str(rpm_acc) + str(type(rpm_acc)))
     intervals += 1   
-  if intervals == 0:
-    return 0
-  rpm = int(rpm_acc/intervals)
+  if intervals > 0:
+    rpm = int(rpm_acc/intervals)
+  else:
+    rpm = 0
   global int_queue
   int_queue.put(rpm)
   return rpm  

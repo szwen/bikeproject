@@ -53,6 +53,7 @@ def getRpm(handler):
   if not main_queue.empty():
     rpm_to_return = str(main_queue.get())
   else:
+    print("Queue empty")
     pass    
   print("Returning rpm: "+ rpm_to_return)
   message = bytes(rpm_to_return, 'utf-8')
@@ -90,7 +91,7 @@ class MyRequestHandler(http.server.BaseHTTPRequestHandler):
       stopService(self)
     elif self.path=='/rpm':
       self.send_response(200)
-      print('Getting rpm')
+      print('Requesting rpm')
       getRpm(self)
     else:
       self.send_response(404)

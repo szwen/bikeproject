@@ -38,7 +38,7 @@
         await sleep(1000)
         $http.get('/rpm').success(function(response){
          console.log('response '+response)
-	       $scope.log='RPM:' + response
+	       $scope.log='RPM: ' + response
          $scope.rpm= response
         })
       }

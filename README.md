@@ -24,3 +24,9 @@ Reads speed and break info from BH stay-at-home bike
  
  The `realtime_frequency` script takes an audio input (assumed to be composed of regular peaks) and computes their frequency in rpm in a 3s window.
  Settings such as `dev_index`, `distance`, `threshold` or `downsample factor` detailed in Tools apply here and they have to be adapted to the signal to measure.
+
+## Webservice
+
+Start `server.py` in a chosen port, for example: `> python3 server.py 8081` 
+* *Start* starts measuring the RPMs
+* *Stop* stops the measurement

@@ -23,37 +23,20 @@
 
 
 
-  <div ng-controller='PostsCtrl' class='container'>
-    <h1>Recent Posts</h1>
-    <ul class='list-group'>
-      <li ng-repeat='post in posts' class='list-group-item'>
-        <strong>@{{post.username}}</strong>
-        <span>{{post.body}}</span>
-      </li>
-    </ul>
-  </div>
   <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js'></script>
   <script>
     var app = angular.module('app',[])
     var started = false
-    app.controller('PostsCtrl', function($scope){
-      $scope.posts = [
-        {
-          username:'dickey',
-          body: 'Node rules!'
-        }
-      ]
-    })
 
     function sleep(ms){
       return new Promise(resolve => setTimeout(resolve,ms));
     }
     async function demo($scope, $http){
       while(started){
-        await sleep(3000)
+        await sleep(1000)
         $http.get('/rpm').success(function(response){
          console.log('response '+response)
-	 $scope.log=response
+	       $scope.log='RPM:' + response
         })
       }
     }
@@ -63,14 +46,9 @@
         started = true
         $scope.actions='Starting service'
         $http.get('/start').success(function(response){
-	  $scope.log=response
+	       $scope.log=response
           demo($scope, $http)
-   //       while(true){
-   //         await sleep(3000)
-   //         $http.get('/rpm').success(function(response){
-   //	      $scope.log+='\n'+response
-   //         })
-   //       }
+
             
 	})
       }

@@ -67,6 +67,8 @@ def stopService(handler):
   handler.end_headers()
   message = bytes('service stopped!', 'utf-8')
   handler.wfile.write(message)
+  global rpm_to_return
+  rpm_to_return = 'No value'
 
 
 class MyRequestHandler(http.server.BaseHTTPRequestHandler):

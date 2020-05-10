@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="http://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <link rel="icon" type="image/svg+xml" href="https://upload.wikimedia.org/wikipedia/commons/0/00/Bicycle-icon.svg">
+
+</head>
+<body ng-app='app'>
+  <div ng-controller='ActionsCtrl' class='container'>
+    <h1>What do you want to do?</h1>
+   <!-- <div class='btn-group' role='group'> -->
+      <button type='button' class='btn btn-primary btn-lg btn-block' ng-click='startService()' type='start'>Start</button>
+      <button type='button' class='btn btn-secondary btn-lg btn-block' ng-click='stopService()' type='stop'>Stop</button>
+      <button type='button' class='btn btn-warning btn-lg btn-block' ng-click='viewLogs()' type='logs'>View Logs</button>  
+        <!--  </div> -->
+    <br>
+    {{actions}}
+    <br>
+    {{log}}
+    <br>
+    <h1 class="text-danger">{{rpm}}</h1>
+</div>
+
+         <br> 
+
+
+
+  <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js'></script>
+  <script>
+    var app = angular.module('app',[])
+    var started = false
+
+    function sleep(ms){
+      return new Promise(resolve => setTimeout(resolve,ms));
+    }
+    async function demo($scope, $http){
+      while(started){
+        await sleep(1000)
+        $http.get('/rpm').success(function(response){
+         console.log('response '+response)
+	       $scope.log='RPM: ' + response
+         $scope.rpm= response
+        })
+      }
+    }
+    app.controller('ActionsCtrl', function($scope, $http){
+      $scope.actions='Waiting for info...'
+      $scope.startService = function(){
+        started = true
+        $scope.actions='Starting service'
+        $http.get('/start').success(function(response){
+	       $scope.log=response
+          demo($scope, $http)
+
+            
+	})
+      }
+      $scope.stopService = function(){
+        $scope.actions='Stopping service'
+        $http.get('/stop').success(function(response){
+          started = false
+	        $scope.log=response
+	})
+      }
+      $scope.viewLogs = function(){
+        $scope.actions='Requesting logs'
+      }
+    })
+  </script>
+</body>
+</html>

@@ -17,6 +17,8 @@
     {{actions}}
     <br>
     {{log}}
+    <br>
+    <h1 class="text-danger">{{rpm}}</h1>
 </div>
 
          <br> 
@@ -37,6 +39,7 @@
         $http.get('/rpm').success(function(response){
          console.log('response '+response)
 	       $scope.log='RPM:' + response
+         $scope.rpm= response
         })
       }
     }

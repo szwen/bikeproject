@@ -20,6 +20,15 @@ Reads speed and break info from BH stay-at-home bike
   * downsample factor: from a 44.1kHz signal the samples per second are divided by this factor - make a few tests with the files above to make sure you keep the samples to analyse to a minimum without missing any peak in the signal.
   * start (in seconds): in case there is a delay from the start of the recording and the start of the signal to analyse.
   
+### Helpers for passthrough test
+
+* `real_bike.wav` is a recording of the bike sensor signal (for computing RPM)
+* `real_bike_passthrough.wav` is a recording of the previous signal, once passed through the raspberry (play wav file, output to jack, and record it back from USB mic input)
+* `passthrough_test.py` records input from USB mic
+* `play_sound.py` plays a wav file and outputs it to the jack
+
+The passthrough recording was done by connecting the jack audio output to the USB mic input, then starting the `passthrough_test.py` to start recording from USB mic input, and then running the `play_sound.py` script with the original `real_bike.wav` signal to play the sound in the jack output.
+  
  ## RPM computation
  
  The `realtime_frequency` script takes an audio input (assumed to be composed of regular peaks) and computes their frequency in rpm in a 3s window.

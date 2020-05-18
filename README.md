@@ -31,7 +31,7 @@ This is done for a fitness bike with a break pad to regulate the pedaling streng
 
 The break strength is computed using the ultrasonic sensor HC-SR04 that measures the distance from the break pad regulator to the frame: as the distance increases so does the break strength. **This is an approximate measure**, since it depends on the material of the break pad, as well as on its wearing degree. Therefore this needs continuous calibration.
 
-The `sensor.py` script starts the ultrasonic sensor and takes distance reads periodically.
+The `sensor.py` script starts the ultrasonic sensor and takes distance reads periodically. It is based on this script: http://edupython.blogspot.com/2016/07/midiendo-distancias-el-sensor.html
 
 ## Webservice
 

@@ -33,6 +33,8 @@ The break strength is computed using the ultrasonic sensor HC-SR04 that measures
 
 The `sensor.py` script starts the ultrasonic sensor and takes distance reads periodically. It is based on this script: http://edupython.blogspot.com/2016/07/midiendo-distancias-el-sensor.html
 
+It has been modified to compute the mean of X values, which can be configured using the `MEAN_RANGE` variable.
+
 ## Webservice
 
 Start `server.py` in a chosen port, for example: `> python3 server.py 8081` 

@@ -24,6 +24,16 @@ Reads speed and break info from BH stay-at-home bike
  
  The `realtime_frequency` script takes an audio input (assumed to be composed of regular peaks) and computes their frequency in rpm in a 3s window.
  Settings such as `dev_index`, `distance`, `threshold` or `downsample factor` detailed in Tools apply here and they have to be adapted to the signal to measure.
+ 
+## Break pressure computation
+
+This is done for a fitness bike with a break pad to regulate the pedaling strength.
+
+The break strength is computed using the ultrasonic sensor HC-SR04 that measures the distance from the break pad regulator to the frame: as the distance increases so does the break strength. **This is an approximate measure**, since it depends on the material of the break pad, as well as on its wearing degree. Therefore this needs continuous calibration.
+
+The `sensor.py` script starts the ultrasonic sensor and takes distance reads periodically. It is based on this script: http://edupython.blogspot.com/2016/07/midiendo-distancias-el-sensor.html
+
+It has been modified to compute the mean of X values, which can be configured using the `MEAN_RANGE` variable.
 
 ## Webservice
 

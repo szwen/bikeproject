@@ -15,6 +15,13 @@ TRIG = 23
 # HC-SR04.
 ECHO = 24
 
+# list to store values and compute the mean
+raw_values = []
+
+
+# MAX_DISTANCE = 50 #setting max distance (to avoid weird jumps)
+MEAN_RANGE = 10 #size of values over which to compute the range
+
 # Indicar que se usa el esquema de numeración de pines
 # de BCM (Broadcom SOC channel), es decir los números de
 # pines GPIO (General-Purpose Input/Output).
@@ -27,6 +34,7 @@ GPIO.setup(TRIG, GPIO.OUT)
 GPIO.setup(ECHO, GPIO.IN)
 
 print("Medición de distancias en progreso")
+
 
 try:
     # Ciclo infinito.
@@ -74,6 +82,19 @@ try:
 
         # Imprimir resultado.
         print ("Distancia: %.2f cm" % distancia)
+
+        # Add to list
+        raw_values.append(distancia)
+
+        if len(raw_values)==MEAN_RANGE:
+        	acc_distance = sum(raw_values)/len(raw_values)
+        	print("Mean distance: "+ str(acc_distance))
+        	raw_values = []
+
+
+
+        
+
 
 finally:
     # Reiniciar todos los canales de GPIO.

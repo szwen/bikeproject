@@ -34,7 +34,7 @@ def find_local_max(s, min_distance = 0, threshold = 0, start = 0):
       if s[p] > s[p-1] and s[p] >= s[p+1]:
         max_array.append([p,s[p]])
         p += min_distance
-        print('max found!' + str(p))
+        print('RPM: max found!' + str(p))
     p += 1
   return max_array
     
@@ -58,9 +58,9 @@ def prepareInput(in_data):
 def compute_rpm(max_values):
   rpm_acc = 0
   intervals = 0
-  print('compute rpm')
+  print('RPM: compute rpm')
   for m in range(len(max_values)-1):
-    print('computing peaks')
+    print('RPM: computing peaks')
     distance = max_values[m+1][0] - max_values[m][0]
     #print('distance ' + str(distance) + str(type(distance)))
     rpm_acc += int(60 * real_rate / distance)
@@ -80,12 +80,12 @@ def compute_rpm(max_values):
 
 def processSignal(trololo):
   #global rpm
-  print('length trololo ' + str(len(trololo)))
+  print('RPM: length trololo ' + str(len(trololo)))
   # downsample
   a = np.array(trololo)
   b = a[::downsample_factor]
   max_values = find_local_max(b, int(min_distance), threshold)
-  print('max donwsampled')
+  print('RPM: max donwsampled')
   print(max_values)
   rpm = compute_rpm(max_values)
   print('RPM '+str(rpm))
@@ -99,11 +99,11 @@ def main(stop = None, ext_queue = None):
   global int_queue
   if ext_queue:
     int_queue = ext_queue
-    print("Using external queue")
+    print("RPM: Using external queue")
   else:
     int_queue = queue.Queue()
-    print("Using internal queue")
-  print("recording")
+    print("RPM: Using internal queue")
+  print("RPM: recording")
   try: 
     while True:
       if stop:
@@ -111,7 +111,7 @@ def main(stop = None, ext_queue = None):
           break
   except KeyboardInterrupt:
     pass
-  print("finished recording")
+  print("RPM: finished recording")
   stream.stop_stream()
   stream.close()
   audio.terminate()

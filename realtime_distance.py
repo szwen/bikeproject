@@ -91,6 +91,8 @@ def main(stop = None, ext_queue = None):
   except KeyboardInterrupt:
     pass
   print("DIST: finished distance measuring")
+  # Restart all GPIO channels.
+  GPIO.cleanup()
   return
 
 if __name__ == "__main__":

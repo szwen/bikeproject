@@ -2,14 +2,20 @@ import http.server
 import socketserver
 import sys
 import realtime_frequency as rpm
+import realtime_distance as dist
 import threading
 import queue
 
 stop_thread = False
+#thread for rpm measure
 global thread1 
+#thread for distance measure
+global thread2
 #= threading.Thread(target = rpm.main, args =(lambda : stop_thread, ))
-global main_queue
+global main_queue_rpm
 rpm_to_return = 'No value'
+global main_queue_dist
+dist_to_return = 'No value'
 
 
 
@@ -31,45 +37,76 @@ def getBye(handler):
 
 def startService(handler):
   global thread1
+  global thread2
   global stop_thread
   stop_thread = False
-  global main_queue
-  main_queue = queue.Queue()
+  global main_queue_rpm
+  global main_queue_dist
+  main_queue_rpm = queue.Queue()
+  main_queue_dist = queue.Queue()
   handler.send_header('Content-type', 'text/plain')
   handler.end_headers()
   message = bytes('service started!', 'utf-8')
   handler.wfile.write(message)
+  #start rpm service
   try:
-    thread1 = threading.Thread(target = rpm.main, args =(lambda : stop_thread, main_queue))
+    thread1 = threading.Thread(target = rpm.main, args =(lambda : stop_thread, main_queue_rpm))
     thread1.start()
   except RuntimeError:
-    print('thread was already started')
+    print('thread1 was already started')
     pass
+  #start distance service
+  try:
+    thread2 = threading.Thread(target = dist.main, args =(lambda : stop_thread, main_queue_dist))
+    thread2.start()
+  except RuntimeError:
+    print('thread2 was already started')
+    pass
+
 
 def getRpm(handler):
   handler.send_header('Content-type', 'text/plain')
   handler.end_headers()
   global rpm_to_return
-  if not main_queue.empty():
-    rpm_to_return = str(main_queue.get())
+  if not main_queue_rpm.empty():
+    rpm_to_return = str(main_queue_rpm.get())
   else:
-    print("Queue empty")
+    # print("RPM queue empty")
     pass    
-  print("Returning rpm: "+ rpm_to_return)
+  # print("Returning rpm: "+ rpm_to_return)
   message = bytes(rpm_to_return, 'utf-8')
+  handler.wfile.write(message)
+
+
+def getDist(handler):
+  handler.send_header('Content-type', 'text/plain')
+  handler.end_headers()
+  global dist_to_return
+  if not main_queue_dist.empty():
+    dist_to_return = str(dist_to_return.get())
+  else:
+    # print("Dist queue empty")
+    pass    
+  # print("Returning dist: "+ dist_to_return)
+  message = bytes(dist_to_return, 'utf-8')
   handler.wfile.write(message)
 
 def stopService(handler):
   global stop_thread
-  global thread_1
+  #global thread1
+  #global thread2
   stop_thread = True
-  thread1.join() 
+  #shutdown threads
+  #thread1.join() 
+  #thread2.join()
   handler.send_header('Content-type', 'text/plain')
   handler.end_headers()
   message = bytes('service stopped!', 'utf-8')
   handler.wfile.write(message)
   global rpm_to_return
+  global dist_to_return
   rpm_to_return = 'No value'
+  dist_to_return = 'No value'
 
 
 class MyRequestHandler(http.server.BaseHTTPRequestHandler):
@@ -91,8 +128,12 @@ class MyRequestHandler(http.server.BaseHTTPRequestHandler):
       stopService(self)
     elif self.path=='/rpm':
       self.send_response(200)
-      print('Requesting rpm')
+      # print('Requesting rpm')
       getRpm(self)
+    elif self.path=='/dist':
+      self.send_response(200)
+      # print('Requesting dist')
+      getDist(self)
     else:
       self.send_response(404)
     return

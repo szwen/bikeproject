@@ -18,7 +18,8 @@
     <br>
     {{log}}
     <br>
-    <h1 class="text-danger">{{rpm}}</h1>
+    <h1 class="text-danger"> RPM: {{rpm}}</h1>
+    <h1 class="text-info"> STRENGTH: {{dist}}</h1>
 </div>
 
          <br> 
@@ -37,9 +38,14 @@
       while(started){
         await sleep(1000)
         $http.get('/rpm').success(function(response){
-         console.log('response '+response)
+         //console.log('response '+response)
 	       $scope.log='RPM: ' + response
          $scope.rpm= response
+        })
+        $http.get('/dist').success(function(response){
+         //console.log('response '+response)
+         $scope.log=$scope.log + ' Dist: ' + response
+         $scope.dist= response
         })
       }
     }
